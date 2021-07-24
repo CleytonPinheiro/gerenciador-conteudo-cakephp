@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   php:
@@ -36,8 +36,15 @@ services:
       - ./app:/srv/app
       - ./.docker/nginx:/etc/nginx/conf.d
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - php
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
 volumes:
   data:
