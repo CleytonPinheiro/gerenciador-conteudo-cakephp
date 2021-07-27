@@ -29,10 +29,14 @@ class ArticlesTable extends Table
 
     return $query->group(['Articles.id']);
 }
+
     public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
-        $this->belongsToMany('Tags');
+       $this->belongsToMany('Tags', [
+        'joinTable' => 'articles_tags',
+        'dependent' => true
+    ]);
     }
     public function beforeSave(EventInterface $event, $entity, $options)
     {
@@ -81,11 +85,10 @@ class ArticlesTable extends Table
         $validator
             ->notEmptyString('title')
             ->minLength('title', 10)
-            ->maxLength('title', 255)
-       
+            ->maxLength('title', 255)       
             ->notEmptyString('body')
             ->minLength('body', 10);
-
+            
         return $validator;
     }
 }
