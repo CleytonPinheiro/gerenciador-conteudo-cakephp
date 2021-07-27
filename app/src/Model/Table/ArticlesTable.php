@@ -32,15 +32,49 @@ class ArticlesTable extends Table
     public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
-        $this->belongsToMany('Tags'); // Add this line
+        $this->belongsToMany('Tags');
     }
     public function beforeSave(EventInterface $event, $entity, $options)
     {
+        if ($entity->tag_string) {
+        $entity->tags = $this->_buildTags($entity->tag_string);
+        }
+
         if ($entity->isNew() && !$entity->slug) {
             $sluggedTitle = Text::slug($entity->title);           
             $entity->slug = substr($sluggedTitle, 0, 191);
         }
     }
+
+    protected function _buildTags($tagString)
+{
+    $newTags = array_map('trim', explode(',', $tagString));
+   
+    $newTags = array_filter($newTags);
+    
+    $newTags = array_unique($newTags);
+
+    $out = [];
+    $tags = $this->Tags->find()
+        ->where(['Tags.title IN' => $newTags])
+        ->all();
+   
+    foreach ($tags->extract('title') as $existing) {
+        $index = array_search($existing, $newTags);
+        if ($index !== false) {
+            unset($newTags[$index]);
+        }
+    }
+   
+    foreach ($tags as $tag) {
+        $out[] = $tag;
+    }
+    
+    foreach ($newTags as $tag) {
+        $out[] = $this->Tags->newEntity(['title' => $tag]);
+    }
+    return $out;
+}
 
     public function validationDefault(Validator $validator): Validator
     {
