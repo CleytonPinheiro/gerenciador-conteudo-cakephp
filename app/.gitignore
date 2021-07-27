@@ -1,7 +1,10 @@
-# remove the following:
-
-!app/.gitkeep
-# end removal
+# CakePHP specific files #
+##########################
+/config/app_local.php
+/config/.env
+/logs/*
+/tmp/*
+/vendor/*
 
 # OS generated files #
 ######################
@@ -38,7 +41,3 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
-
-# project files     #
-######################
-.docker/php/development/conf.d/*.ini

@@ -25,7 +25,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '354912a647b0e383c2aa127b0af0e3db3f4ac2f2186ee1ddbffedc331147ff8e'),
+        'salt' => env('SECURITY_SALT', '__SALT__'),
     ],
 
     /*
@@ -37,9 +37,6 @@ return [
     'Datasources' => [
         'default' => [
             'host' => 'localhost',
-            'port' => '3306',
-            'className' => 'Cake \ Database \ Connection',
-            'driver' => 'Cake \ Database \ Driver \ Mysql',
             /*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
@@ -47,11 +44,10 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'cakephp',
-            'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
+            'username' => 'my_app',
+            'password' => 'secret',
+
+            'database' => 'my_app',
             /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
