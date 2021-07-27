@@ -23,7 +23,6 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
-
 /*
  * The default class to use for all routes
  *
@@ -51,12 +50,14 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * to use (in this case, templates/Pages/home.php)...
      */
     $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-
     /*
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     $builder->connect('/pages/*', 'Pages::display');
 
+    $builder->scope('/articles', function (RouteBuilder $builder) {
+        $builder->connect('/tagged/*', ['controller' => 'Articles', 'action' => 'tags']);
+    });
     /*
      * Connect catchall routes for all controllers.
      *
