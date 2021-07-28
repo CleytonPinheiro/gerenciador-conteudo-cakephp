@@ -88,7 +88,7 @@ class ArticlesController extends AppController{
             ->contain('Tags')
             ->firstOrFail();
 
-        $this->Authorization->authorize($article);
+        //$this->Authorization->authorize($article);
 
         if ($this->request->is(['post', 'put'])) {
             $this->Articles->patchEntity($article, $this->request->getData(),[
