@@ -49,4 +49,4 @@ services:
       - PMA_ARBITRARY=1
 
 volumes:
-  data:
+  data: ./DadosSql.sql
