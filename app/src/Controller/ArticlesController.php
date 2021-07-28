@@ -75,42 +75,44 @@ class ArticlesController extends AppController{
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
 
-            $article->user_id = 1;
+             // Changed: Set the user_id from the current user.
+            $article->user_id = $this->request->getAttribute('identity')->getIdentifier();
 
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('Your article has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Unable to add your article.'));
-        }
-       
+        }       
         $tags = $this->Articles->Tags->find('list')->all();
       
-        $this->set('tags', $tags);
-        $this->set('article', $article);
+        $this->set(compact('article', 'tags'));
     }
     
-    public function edit($slug){
-    $article = $this->Articles
-        ->findBySlug($slug)
-        ->contain('Tags')
-        ->firstOrFail();
+    public function edit($slug)
+    {
+        $article = $this->Articles
+            ->findBySlug($slug)
+            ->contain('Tags')
+            ->firstOrFail();
 
-    $this->Authorization->authorize($article);
+        $this->Authorization->authorize($article);
 
-    if ($this->request->is(['post', 'put'])) {
-        $this->Articles->patchEntity($article, $this->request->getData());
-        if ($this->Articles->save($article)) {
-            $this->Flash->success(__('Your article has been updated.'));
-            return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['post', 'put'])) {
+            $this->Articles->patchEntity($article, $this->request->getData(),[
+                 // Added: Disable modification of user_id.
+            'accessibleFields' => ['user_id' => false]
+            ]);
+            if ($this->Articles->save($article)) {
+                $this->Flash->success(__('Your article has been updated.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to update your article.'));
         }
-        $this->Flash->error(__('Unable to update your article.'));
-    }
-    
-    $tags = $this->Articles->Tags->find('list')->all();
-    
-    $this->set('tags', $tags);
-    $this->set('article', $article);
+        
+        $tags = $this->Articles->Tags->find('list')->all();
+        
+         $this->set(compact('article', 'tags'));
     }
 
     public function delete($slug)
