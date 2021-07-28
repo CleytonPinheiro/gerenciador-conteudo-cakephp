@@ -36,7 +36,7 @@ services:
       - ./app:/srv/app
       - ./.docker/nginx:/etc/nginx/conf.d
     ports:
-      - "80:80"
+      - 1025:80
     depends_on:
       - php
 
