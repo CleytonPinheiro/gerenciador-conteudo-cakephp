@@ -28,6 +28,8 @@ A [cakephp/app 4.2](https://github.com/cakephp/app) template for Docker Compose 
 
 -   [Installation](#installation)
 
+-   [Acesso](#Acesso)
+
 -   [Usage](#usage)
 
 -   [PHP](#php)
@@ -54,7 +56,7 @@ git clone https://github.com/CleytonPinheiro/gerenciador-conteudo-cakephp.git
 cd /dir/pasta/do/projeto
 ```
 
-2. Executar o comando:
+3. Executar o comando:
 
 ```console
 make init
@@ -72,9 +74,22 @@ That's it! Now just remove `app/*` from [.gitignore](.gitignore). You may also w
 
 > Note: `make init` and `make init.nocache` output interactively, while `make start` and `make up` do not.
 
-## Usage
+## Acesso
 
-After install browse to [http://localhost:8080](http://localhost:8080) to see the CakePHP welcome page.
+1. Com os containers, acesse no seu navegador: localhost:1025 para acessar a aplicação.
+2. Acessando no navegador localhost:8080, terá acesso ao phpMyAdmin, para administração do database.
+3. Insira os dados:
+
+-   **SERVIDOR**: db
+-   ** UTILIZADOR**: root
+-   ** PAPALVRA-PASSE**: root
+
+4. Importar a estrutura das tabelas nos bancos:
+   [Dados/estrutura do banco](https://github.com/CleytonPinheiro/gerenciador-conteudo-cakephp/blob/main/DadosSql.sql)
+
+https://github.com/CleytonPinheiro/gerenciador-conteudo-cakephp/blob/main/DadosSql.sql
+
+## Usage
 
 A [Makefile](Makefile) is provided with some optional commands for your convenience. Please review the Makefile as
 
