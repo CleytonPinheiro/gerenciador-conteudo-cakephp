@@ -26,17 +26,19 @@ class ArticlesController extends AppController{
         return $query->group(['Articles.id']);
     }
 
-        public function tags(...$tags)
-        {            
-            $articles = $this->Articles->find('tagged', [
+    public function tags(...$tags)
+    {  
+        $this->Authorization->skipAuthorization();
+        
+        $articles = $this->Articles->find('tagged', [
                     'tags' => $tags
                 ])
                 ->all();          
-            $this->set([
+        $this->set([
                 'articles' => $articles,
                 'tags' => $tags
             ]);
-        }
+    }
 
     public function initialize(): void
     {
@@ -47,6 +49,8 @@ class ArticlesController extends AppController{
     }
 
     public function index() {
+        $this->Authorization->skipAuthorization();
+
         $this->loadComponent('Paginator');
         $articles = $this->Paginator->paginate($this->Articles->find());
         $this->set(compact('articles'));
@@ -54,6 +58,8 @@ class ArticlesController extends AppController{
 
     public function view($slug = null)
         {
+            $this->Authorization->skipAuthorization();
+
             $article = $this->Articles
                 ->findBySlug($slug)
                 ->contain('Tags')
@@ -64,6 +70,8 @@ class ArticlesController extends AppController{
     public function add()
     {
         $article = $this->Articles->newEmptyEntity();
+        $this->Authorization->authorize($article);
+
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
 
@@ -88,6 +96,8 @@ class ArticlesController extends AppController{
         ->contain('Tags')
         ->firstOrFail();
 
+    $this->Authorization->authorize($article);
+
     if ($this->request->is(['post', 'put'])) {
         $this->Articles->patchEntity($article, $this->request->getData());
         if ($this->Articles->save($article)) {
@@ -108,6 +118,9 @@ class ArticlesController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $article = $this->Articles->findBySlug($slug)->firstOrFail();
+
+        $this->Authorization->authorize($article);
+
         if ($this->Articles->delete($article)) {
             $this->Flash->success(__('The {0} article has been deleted.', $article->title));
             return $this->redirect(['action' => 'index']);
