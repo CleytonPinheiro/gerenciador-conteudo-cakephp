@@ -55,5 +55,6 @@ class AppController extends Controller
     {
         parent::beforeFilter($event);    
         $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+        $this->Authentication->addUnauthenticatedActions(['login', 'add']);
     }
 }
